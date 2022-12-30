@@ -1,11 +1,15 @@
-from fastapi import FastAPI
+from fastapi import Body, FastAPI
 from schemas import Person
 
 app = FastAPI()
 
 
-@app.post('/hello', tags=['common methods'],)
-def greetings(person: Person,) -> dict[str, str]:
+@app.post('/hello')
+def greetings(
+    person: Person = Body(
+            ..., examples=Person.Config.schema_extra['examples']
+    )
+) -> dict[str, str]:
     if isinstance(person.surname, list):
         surnames = ' '.join(person.surname)
     else:
